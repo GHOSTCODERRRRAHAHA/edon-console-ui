@@ -72,6 +72,7 @@ const App = () => {
     const params = new URLSearchParams(window.location.search);
     const baseUrl = (params.get("base") || params.get("gateway") || "").trim();
     const token = (params.get("token") || "").trim();
+    localStorage.setItem("edon_mock_mode", "false");
 
     const sanitizeBaseUrl = (value: string) => {
       if (!value) return "";
