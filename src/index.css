@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 15% 7%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 14% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 14% 9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 142 70% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 14%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 220 12% 18%;
+    --muted-foreground: 220 8% 60%;
+
+    --accent: 142 70% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 76% 50%;
+    --success-foreground: 0 0% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+
+    --border: 220 12% 20%;
+    --input: 220 12% 20%;
+    --ring: 142 70% 45%;
+
+    --radius: 1rem;
+
+    --glass-bg: 220 12% 12% / 0.6;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-blur: 12px;
+
+    --gradient-purple: linear-gradient(135deg, hsl(142 70% 45%) 0%, hsl(168 62% 42%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(220 15% 8%) 0%, hsl(220 14% 6%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(220 12% 12% / 0.8) 0%, hsl(220 12% 10% / 0.6) 100%);
+
+    --chart-allowed: 142 76% 50%;
+    --chart-blocked: 0 84% 60%;
+    --chart-confirm: 38 92% 50%;
+    --chart-purple: 280 100% 70%;
+    --chart-pink: 320 100% 60%;
+
+    --sidebar-background: 220 14% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 142 70% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 14%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 220 12% 20%;
+    --sidebar-ring: 142 70% 45%;
+  }
+
+  .dark {
+    --background: 220 15% 7%;
+    --foreground: 0 0% 98%;
+    --card: 220 14% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 14% 9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 142 70% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 14%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 12% 18%;
+    --muted-foreground: 220 8% 60%;
+    --accent: 142 70% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 12% 20%;
+    --input: 220 12% 20%;
+    --ring: 142 70% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body, #root {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, hsl(220 15% 7%) 0%, hsl(220 14% 6%) 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-xl border border-white/10 rounded-2xl;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300;
+  }
+
+  .glass-card-hover:hover {
+    @apply border-white/20;
+    box-shadow: 
+      0 12px 40px rgba(139, 92, 246, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(280 100% 70%) 0%, hsl(320 100% 65%) 100%);
+  }
+
+  .edon-brand {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.08em;
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  }
+
+  .badge-allowed {
+    @apply bg-emerald-500/20 text-emerald-400 border border-emerald-500/30;
+  }
+
+  .badge-blocked {
+    @apply bg-red-500/20 text-red-400 border border-red-500/30;
+  }
+
+  .badge-confirm {
+    @apply bg-amber-500/20 text-amber-400 border border-amber-500/30;
+  }
+
+  .stat-card-gradient {
+    background: linear-gradient(135deg, hsl(240 10% 12% / 0.8) 0%, hsl(260 12% 10% / 0.6) 100%);
+  }
+
+  .nav-item {
+    @apply relative text-muted-foreground transition-all duration-300 ease-out;
+    will-change: transform, background-color, color;
+  }
+
+  .nav-item:hover {
+    @apply text-foreground bg-white/10;
+  }
+
+  .nav-item-active {
+    @apply text-foreground bg-white/15;
+  }
+
+  .chart-glow {
+    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+  }
+}
