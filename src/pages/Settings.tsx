@@ -185,8 +185,8 @@ useEffect(() => {
 
     if (/PASTE_YOUR_|NEW_GATEWAY_TOKEN_|TOKEN_HERE/i.test(trimmedToken)) {
       toast({
-        title: "Invalid token",
-        description: "You pasted a placeholder token. Paste your real EDON token.",
+        title: "Invalid access key",
+        description: "You pasted a placeholder key. Paste your real EDON access key.",
         variant: "destructive",
       });
       return;
@@ -203,8 +203,8 @@ useEffect(() => {
 
     if (!isLikelyToken(trimmedToken)) {
       toast({
-        title: "Invalid token",
-        description: "Token format looks invalid. Paste your full EDON token.",
+        title: "Invalid access key",
+        description: "Access key format looks invalid. Paste your full EDON access key.",
         variant: "destructive",
       });
       return;
@@ -215,8 +215,8 @@ useEffect(() => {
 
     if (!isHexToken(trimmedToken) && !trimmedToken.startsWith("edon_")) {
       toast({
-        title: "Token saved",
-        description: "Note: token is not hex; some gateways expect hex format.",
+        title: "Access key saved",
+        description: "Note: key is not hex; some connections expect hex format.",
       });
     } else {
       toast({
@@ -366,7 +366,7 @@ useEffect(() => {
       }
 
       if (!isLikelyToken(trimmedToken)) {
-        throw new Error("Token format looks invalid.");
+        throw new Error("Access key format looks invalid.");
       }
 
       // Persist first so the rest of the app uses the same base+token
@@ -383,11 +383,11 @@ useEffect(() => {
       });
 
       if (res.status === 401) {
-        throw new Error("401 Unauthorized — token not accepted by gateway.");
+        throw new Error("401 Unauthorized — access key not accepted by connection.");
       }
       if (!res.ok) {
         const txt = await safeText(res);
-        throw new Error(`Gateway error ${res.status}. ${txt}`.trim());
+        throw new Error(`Connection error ${res.status}. ${txt}`.trim());
       }
 
       // 2) authenticated endpoint
@@ -398,7 +398,7 @@ useEffect(() => {
       });
 
       if (res2.status === 401) {
-        throw new Error("401 Unauthorized on integrations — token accepted for /health but not for protected routes.");
+        throw new Error("401 Unauthorized on integrations — access key accepted for /health but not for protected routes.");
       }
       if (!res2.ok) {
         const txt = await safeText(res2);
@@ -408,7 +408,7 @@ useEffect(() => {
       setConnectionStatus("connected");
       toast({
         title: "Connected",
-        description: "Gateway reachable and authenticated.",
+        description: "Connection verified.",
       });
 
       // Keep mock off after success
@@ -430,8 +430,8 @@ useEffect(() => {
     const safeBase = normalizeBaseUrl(trimmedBase);
     if (/PASTE_YOUR_|NEW_GATEWAY_TOKEN_|TOKEN_HERE/i.test(trimmedToken)) {
       toast({
-        title: "Placeholder token",
-        description: "Replace with your real EDON token before running the smoke test.",
+        title: "Placeholder key",
+        description: "Replace with your real EDON access key before running the system check.",
         variant: "destructive",
       });
       return;
@@ -439,15 +439,15 @@ useEffect(() => {
     if (!safeBase) {
       toast({
         title: "Invalid base URL",
-        description: "Enter a valid http(s) URL before running the smoke test.",
+        description: "Enter a valid http(s) URL before running the system check.",
         variant: "destructive",
       });
       return;
     }
     if (!isLikelyToken(trimmedToken)) {
       toast({
-        title: "Invalid token",
-        description: "Token format looks invalid.",
+        title: "Invalid access key",
+        description: "Access key format looks invalid.",
         variant: "destructive",
       });
       return;
@@ -468,7 +468,7 @@ useEffect(() => {
         ok: false,
       });
       toast({
-        title: "Smoke test failed",
+        title: "System check failed",
         description: msg.slice(0, 200),
         variant: "destructive",
       });
@@ -478,15 +478,15 @@ useEffect(() => {
   };
 
   function getSmokeTestCause(steps: SmokeStep[]): string | null {
-    if (steps.length === 0) return "Gateway unreachable or CORS blocked.";
+    if (steps.length === 0) return "Connection unavailable.";
     const health = steps[0];
     const healthOk = health?.ok === true;
     const some401 = steps.some((s) => s.status === 401);
     const some404 = steps.some((s) => s.status === 404);
     const hasNetworkError = steps.some((s) => s.status === 0 || s.status == null);
-    if (healthOk && some401) return "Token accepted by /health but rejected by protected routes (wrong token in UI or gateway expects different token).";
+    if (healthOk && some401) return "Access key accepted by /health but rejected by protected routes (wrong key in UI or connection expects a different key).";
     if (some404) return "UI expects endpoints not present in this gateway build.";
-    if (hasNetworkError) return "Gateway unreachable or CORS blocked.";
+    if (hasNetworkError) return "Connection unavailable.";
     return null;
   }
 
@@ -507,8 +507,8 @@ useEffect(() => {
     const safeBase = normalizeBaseUrl(trimmedBase);
     if (/PASTE_YOUR_|NEW_GATEWAY_TOKEN_|TOKEN_HERE/i.test(trimmedToken)) {
       toast({
-        title: "Placeholder token",
-        description: "Replace with your real EDON token before running the verification test.",
+        title: "Placeholder key",
+        description: "Replace with your real EDON access key before running the validation check.",
         variant: "destructive",
       });
       return;
@@ -516,15 +516,15 @@ useEffect(() => {
     if (!safeBase) {
       toast({
         title: "Invalid base URL",
-        description: "Enter a valid http(s) URL before running the verification test.",
+        description: "Enter a valid http(s) URL before running the validation check.",
         variant: "destructive",
       });
       return;
     }
     if (!isLikelyToken(trimmedToken)) {
       toast({
-        title: "Invalid token",
-        description: "Token format looks invalid.",
+        title: "Invalid access key",
+        description: "Access key format looks invalid.",
         variant: "destructive",
       });
       return;
@@ -579,7 +579,7 @@ useEffect(() => {
       if (!result.pass && !result.inconclusive && (result.rowA.error || result.rowB.error)) {
         const firstError = result.rowA.error || result.rowB.error || "";
         toast({
-          title: "Verification failed",
+          title: "Validation failed",
           description: firstError.slice(0, 150),
           variant: "destructive",
         });
@@ -587,7 +587,7 @@ useEffect(() => {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       toast({
-        title: "Verification failed",
+        title: "Validation failed",
         description: msg.slice(0, 200),
         variant: "destructive",
       });
@@ -634,11 +634,11 @@ useEffect(() => {
                   <p className="mt-2 truncate font-medium">{llmModel} · {llmProvider}</p>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-widest text-muted-foreground">Gateway</p>
+                  <p className="text-[11px] uppercase tracking-widest text-muted-foreground">Connection</p>
                   <p className="mt-2 truncate font-medium">{baseUrl || "not set"}</p>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-                  <p className="text-[11px] uppercase tracking-widest text-muted-foreground">Token</p>
+                  <p className="text-[11px] uppercase tracking-widest text-muted-foreground">Access Key</p>
                   <p className="mt-2 font-medium">
                     {savedTokenInfo ? `len ${savedTokenInfo.length}, …${savedTokenInfo.last4}` : "not set"}
                   </p>
@@ -668,15 +668,15 @@ useEffect(() => {
             </div>
 
             <div className="glass-card p-6 space-y-8">
-            {/* Admin Mode Toggle */}
+            {/* Advanced Tools Toggle */}
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <Label className="text-base flex items-center gap-2">
                   <KeyRound className="w-4 h-4" />
-                  Admin Mode (Advanced Tools)
+                  Advanced Tools
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Shows governance smoke tests and verification tools intended for operators.
+                  Shows system checks and reliability tools for your team.
                 </p>
               </div>
               <Switch
@@ -685,7 +685,7 @@ useEffect(() => {
                   setAdminMode(checked);
                   localStorage.setItem(ADMIN_KEY, checked.toString());
                   toast({
-                    title: checked ? "Admin Mode Enabled" : "Admin Mode Disabled",
+                    title: checked ? "Advanced Tools Enabled" : "Advanced Tools Disabled",
                     description: checked ? "Advanced tools are now visible." : "Advanced tools are now hidden.",
                   });
                 }}
@@ -697,14 +697,14 @@ useEffect(() => {
             <div className="space-y-4">
               <div>
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">Connection</p>
-                <p className="text-sm text-muted-foreground">Connect your EDON Gateway and credentials.</p>
+                <p className="text-sm text-muted-foreground">Connect your EDON account and credentials.</p>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Base URL */}
                 <div className="space-y-3">
                   <Label htmlFor="baseUrl" className="flex items-center gap-2">
                     <Globe className="w-4 h-4" />
-                    EDON Gateway URL
+                    Connection URL
                   </Label>
                   <Input
                     id="baseUrl"
@@ -713,27 +713,27 @@ useEffect(() => {
                     placeholder="http://127.0.0.1:8000"
                     className="bg-secondary/50"
                   />
-                  <p className="text-xs text-muted-foreground">The base URL of your EDON Gateway instance</p>
+                  <p className="text-xs text-muted-foreground">The base URL for your EDON connection</p>
                 </div>
 
-                {/* API Token */}
+                {/* Access Key */}
                 <div className="space-y-3">
                   <Label htmlFor="token" className="flex items-center gap-2">
                     <KeyRound className="w-4 h-4" />
-                    API Token
+                    Access Key
                   </Label>
                   <Input
                     id="token"
                     type="password"
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
-                    placeholder="Enter your X-EDON-TOKEN"
+                    placeholder="Enter your EDON access key"
                     className="bg-secondary/50"
                   />
-                  <p className="text-xs text-muted-foreground">Paste your EDON API token (minimum 16 characters).</p>
+                  <p className="text-xs text-muted-foreground">Paste your EDON access key (minimum 16 characters).</p>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>
-                      Saved token: {savedTokenInfo ? `len ${savedTokenInfo.length}, …${savedTokenInfo.last4}` : "not set"}
+                      Saved key: {savedTokenInfo ? `len ${savedTokenInfo.length}, …${savedTokenInfo.last4}` : "not set"}
                     </span>
                     <button type="button" className="hover:text-foreground transition-colors" onClick={refreshSavedTokenInfo}>
                       Refresh
@@ -902,7 +902,7 @@ useEffect(() => {
                   <Input
                     value={newAgentName}
                     onChange={(e) => setNewAgentName(e.target.value)}
-                    placeholder="ops-agent"
+                    placeholder="team-agent"
                     className="bg-secondary/50"
                   />
                   <Button variant="outline" onClick={addAgent}>Add</Button>
@@ -1061,7 +1061,7 @@ useEffect(() => {
 
             {!adminMode ? (
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-sm text-muted-foreground">
-                Advanced governance tests are hidden. Enable Admin Mode to access smoke tests and verification tools.
+                Advanced checks are hidden. Enable Advanced Tools to access diagnostics and reliability tools.
               </div>
             ) : (
               <>
@@ -1088,7 +1088,7 @@ useEffect(() => {
                           <WifiOff className="w-3 h-3 mr-1" /> Disconnected
                         </>
                       ) : (
-                        "Not Tested"
+                        "Not Checked"
                       )}
                     </Badge>
                   </div>
@@ -1097,12 +1097,12 @@ useEffect(() => {
                     {testing ? (
                       <>
                         <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                        Testing...
+                        Checking...
                       </>
                     ) : (
                       <>
                         <FlaskConical className="w-4 h-4" />
-                        Test Connection
+                        Check Connection
                       </>
                     )}
                   </Button>
@@ -1111,11 +1111,11 @@ useEffect(() => {
 
                 <Separator className="bg-white/10" />
 
-                {/* Governance Smoke Test */}
+                {/* System Check */}
                 <div className="space-y-4">
-                  <Label className="text-base">Governance Smoke Test</Label>
+                  <Label className="text-base">System Check</Label>
                   <p className="text-sm text-muted-foreground">
-                    Verifies gateway connectivity and governance path end-to-end (health, integrations, policy-packs, apply, decisions).
+                    Verifies gateway connectivity and policy flow end-to-end (health, integrations, policy packs, apply, decisions).
                   </p>
                   <div className="space-y-2">
                     <Label htmlFor="policyPack" className="text-sm text-muted-foreground">
@@ -1141,7 +1141,7 @@ useEffect(() => {
                         Running...
                       </>
                     ) : (
-                      "Run Smoke Test"
+                      "Run System Check"
                     )}
                   </Button>
 
@@ -1213,16 +1213,16 @@ useEffect(() => {
 
                 <Separator className="bg-white/10" />
 
-                {/* Governance Verification Test */}
+                {/* Verification Check */}
                 <div className="space-y-4">
-                  <Label className="text-base">Governance Verification Test</Label>
+                  <Label className="text-base">Validation Check</Label>
                   {!hasActiveIntent && (
                     <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">
                       No active intent. Apply a policy pack first.
                     </div>
                   )}
                   <p className="text-sm text-muted-foreground">
-                    Proves EDON changes behavior across policy packs: same action → ALLOW under one pack, BLOCK under another.
+                    Confirms EDON changes behavior across policy packs: same action → ALLOW under one pack, BLOCK under another.
                   </p>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="space-y-2">
@@ -1256,7 +1256,7 @@ useEffect(() => {
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="toolOp" className="text-sm text-muted-foreground">
-                        Test Intent Tool Op
+                        Validate Intent Tool
                       </Label>
                       <Input
                         id="toolOp"
@@ -1291,14 +1291,14 @@ useEffect(() => {
                         Running...
                       </>
                     ) : (
-                      "Run Verification"
+                      "Run Validation"
                     )}
                   </Button>
                   {!canRunVerification && (
                     <p className="text-xs text-muted-foreground">
                       {!hasActiveIntent
                         ? "Apply a policy pack on the Policies page first."
-                        : "Run Connection Test or pass the Governance Smoke Test first, and ensure token and base URL are set."}
+                        : "Run Connection Check or complete the System Check first, and ensure your access key and base URL are set."}
                     </p>
                   )}
 
@@ -1370,12 +1370,12 @@ useEffect(() => {
 
                   <Collapsible>
                     <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                      Recent Governance Verifications
+                      Recent Validation Runs
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                       <div className="mt-3 rounded-lg border border-white/10 bg-white/5 overflow-hidden">
                         {verificationHistory.length === 0 ? (
-                          <p className="p-4 text-xs text-muted-foreground">No verification runs yet.</p>
+                          <p className="p-4 text-xs text-muted-foreground">No validation runs yet.</p>
                         ) : (
                           <div className="overflow-x-auto">
                             <table className="w-full text-sm border-collapse">

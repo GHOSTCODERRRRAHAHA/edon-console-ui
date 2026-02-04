@@ -28,7 +28,7 @@ const defaultModels = [
   "Gemini 1.5 Pro",
 ];
 
-const defaultAgents = ["Default Agent", "Ops Agent", "Research Agent", "Executive Agent"];
+const defaultAgents = ["Default Agent", "Operations Agent", "Research Agent", "Executive Agent"];
 
 export function ChatSidebar({ open, onOpenChange }: { open: boolean; onOpenChange: (next: boolean) => void }) {
   const [width, setWidth] = useState(420);
@@ -142,14 +142,14 @@ export function ChatSidebar({ open, onOpenChange }: { open: boolean; onOpenChang
     const assistantId = `assistant-${Date.now() + 1}`;
     appendMessages(threadId, [
       { id: userId, role: "user", content },
-      { id: assistantId, role: "assistant", content: "Processing with governance..." },
+      { id: assistantId, role: "assistant", content: "Processing with safety checks..." },
     ]);
 
     if (isMockMode() || !getToken()) {
       updateMessage(
         threadId,
         assistantId,
-        "Demo mode response: governance accepted the request. Connect your gateway to run live actions."
+        "Demo mode response: safety checks accepted the request. Connect your gateway to run live actions."
       );
       return;
     }
@@ -296,7 +296,7 @@ export function ChatSidebar({ open, onOpenChange }: { open: boolean; onOpenChang
           </div>
           <div className="flex flex-wrap gap-2 text-[11px]">
             <Badge variant="outline" className="border-white/10 text-muted-foreground">Governed</Badge>
-            <Badge variant="outline" className="border-white/10 text-muted-foreground">Policy enforced</Badge>
+            <Badge variant="outline" className="border-white/10 text-muted-foreground">Safety enforced</Badge>
             <Badge variant="outline" className="border-white/10 text-muted-foreground">Audit logged</Badge>
           </div>
         </div>
@@ -305,7 +305,7 @@ export function ChatSidebar({ open, onOpenChange }: { open: boolean; onOpenChang
           <div className="space-y-4">
             {(activeThread?.messages.length || 0) === 0 ? (
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-xs text-muted-foreground">
-                Start a conversation to route tasks through governance. You can upload images and switch models anytime.
+                Start a conversation to route tasks through safety checks. You can upload images and switch models anytime.
               </div>
             ) : (
               activeThread?.messages.map((msg) => (

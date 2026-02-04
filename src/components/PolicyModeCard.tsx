@@ -16,8 +16,8 @@ const policyModes = {
     color: 'from-sky-400 to-sky-600',
   },
   'ops': {
-    label: 'Ops',
-    description: 'Permissive mode for operations',
+    label: 'Operations',
+    description: 'Flexible mode for business workflows',
     color: 'from-amber-500 to-orange-600',
   },
 };
@@ -45,7 +45,7 @@ export function PolicyModeCard() {
       className="glass-card p-6"
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold">Policy Mode</h3>
+        <h3 className="font-semibold">Safety Mode</h3>
         <Link to="/policies" className="text-primary text-sm flex items-center gap-1 hover:underline">
           Manage <ChevronRight className="w-4 h-4" />
         </Link>
@@ -61,7 +61,7 @@ export function PolicyModeCard() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Policy Version</span>
+          <span className="text-muted-foreground">Safety Version</span>
           <Badge variant="outline" className="font-mono">{policyVersion}</Badge>
         </div>
         <div className="flex items-center justify-between text-sm">

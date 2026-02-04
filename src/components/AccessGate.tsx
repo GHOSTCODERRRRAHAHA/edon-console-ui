@@ -8,10 +8,10 @@ export const AccessGate = () => {
         <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
           EDON Console
         </p>
-        <h1 className="text-2xl font-semibold mb-3">Access required</h1>
+        <h1 className="text-2xl font-semibold mb-3">Sign-in required</h1>
         <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-          This console is available to subscribed users. Please access it from your EDON
-          account so your gateway token is securely passed through.
+          This console is available to subscribed users. Please open it from your EDON
+          account so your connection key is securely passed through.
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           <a href="https://edoncore.com/login">
@@ -19,7 +19,7 @@ export const AccessGate = () => {
           </a>
           <Link to="/settings" className="w-full">
             <Button variant="outline" className="w-full">
-              Enter token manually
+              Enter access key manually
             </Button>
           </Link>
         </div>

@@ -44,6 +44,15 @@ const iconMap: Record<string, typeof Shield> = {
   'clawdbot_safe': ShieldCheck,
 };
 
+const nameMap: Record<string, string> = {
+  'personal_safe': 'Personal Safe',
+  'work_safe': 'Work Safe',
+  'ops_admin': 'Operations',
+  'clawdbot_safe': 'Clawdbot Safe',
+  'finance_lock': 'Finance Lock',
+  'research_mode': 'Research Mode',
+};
+
 const colorMap: Record<string, string> = {
   'personal_safe': 'text-emerald-400',
   'work_safe': 'text-primary',
@@ -206,7 +215,7 @@ export default function Policies() {
         },
         {
           name: 'ops_admin',
-          description: 'Permissive mode for operations teams',
+          description: 'Flexible mode for business workflows',
           risk_level: 'high',
           scope_summary: { clawdbot: 1 },
           constraints_summary: { allowed_tools: 10, blocked_tools: 1, confirm_required: false },
@@ -262,7 +271,7 @@ export default function Policies() {
         },
         {
           name: 'ops_admin',
-          description: 'Permissive mode for operations teams',
+          description: 'Flexible mode for business workflows',
           risk_level: 'high',
           scope_summary: { clawdbot: 1 },
           constraints_summary: { allowed_tools: 10, blocked_tools: 1, confirm_required: false },
@@ -363,7 +372,7 @@ export default function Policies() {
         }
         setActivePolicy(packName);
         toast({
-          title: 'Policy Pack Applied',
+          title: 'Safety Pack Applied',
           description: `${packName} is now active`,
         });
       } else {
@@ -379,7 +388,7 @@ export default function Policies() {
           }
         }
         toast({
-          title: 'Policy Pack Applied',
+          title: 'Safety Pack Applied',
           description: response.message || `${packName} is now active`,
         });
         // Refresh active policy from status
@@ -387,8 +396,8 @@ export default function Policies() {
       }
     } catch (error: unknown) {
       toast({
-        title: 'Failed to Apply Policy',
-        description: error instanceof Error ? error.message : 'Could not apply policy pack',
+        title: 'Failed to Apply Safety Pack',
+        description: error instanceof Error ? error.message : 'Could not apply safety pack',
         variant: 'destructive',
       });
     } finally {
@@ -406,8 +415,8 @@ export default function Policies() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-1">Policies</h1>
-            <p className="text-muted-foreground">Configure agent behavior with preset policy modes</p>
+            <h1 className="text-2xl font-bold mb-1">Safety Packs</h1>
+            <p className="text-muted-foreground">Configure assistant behavior with safety presets</p>
           </div>
 
           {/* Current Policy Banner */}
@@ -418,7 +427,7 @@ export default function Policies() {
                   <ShieldCheck className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Current Active Policy Pack</p>
+                  <p className="text-sm text-muted-foreground">Current Safety Pack</p>
                   <p className="text-xl font-semibold">
                     {activePolicy ? packs.find((p) => p.name === activePolicy)?.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || activePolicy : 'None'}
                   </p>
@@ -468,17 +477,17 @@ export default function Policies() {
 
             {customLimit === 0 ? (
               <div className="mt-4 rounded-lg border border-white/10 bg-white/5 p-4 text-sm text-muted-foreground">
-                Upgrade to Pro to create a custom policy pack.
+                Upgrade to Pro to create a custom safety pack.
               </div>
             ) : (
               <div className="mt-4 grid lg:grid-cols-[1.2fr_1fr] gap-6">
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-muted-foreground">Policy name</label>
+                    <label className="text-xs uppercase tracking-widest text-muted-foreground">Safety pack name</label>
                     <Input
                       value={customName}
                       onChange={(e) => setCustomName(e.target.value)}
-                      placeholder="My custom policy"
+                      placeholder="My custom safety pack"
                       className="bg-secondary/50"
                     />
                   </div>
@@ -487,13 +496,13 @@ export default function Policies() {
                     <Textarea
                       value={customDescription}
                       onChange={(e) => setCustomDescription(e.target.value)}
-                      placeholder="Describe what this policy allows and blocks"
+                      placeholder="Describe what this safety pack allows and blocks"
                       className="bg-secondary/50 min-h-[100px]"
                     />
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <Button onClick={handleSaveCustom} disabled={customPolicies.length >= customLimit && !editingId}>
-                      {editingId ? 'Update Policy' : 'Create Policy'}
+                      {editingId ? 'Update Safety Pack' : 'Create Safety Pack'}
                     </Button>
                     {editingId && (
                       <Button variant="ghost" onClick={resetCustomForm}>
@@ -508,7 +517,7 @@ export default function Policies() {
                 <div className="space-y-3">
                   {customPolicies.length === 0 ? (
                     <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-sm text-muted-foreground">
-                      No custom policies yet. Create your first policy on the left.
+                      No custom packs yet. Create your first safety pack on the left.
                     </div>
                   ) : (
                     customPolicies.map((policy) => (
@@ -577,7 +586,7 @@ export default function Policies() {
 
                     {/* Title & Description */}
                     <h3 className="text-xl font-semibold mb-2">
-                      {policy.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      {nameMap[policy.name] ?? policy.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">{policy.description}</p>
 

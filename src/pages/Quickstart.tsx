@@ -22,17 +22,17 @@ const baseModels = [
 const governanceModes = [
   {
     key: "safe",
-    title: "Safe Operator",
+    title: "Safe Mode",
     can: "Can execute low-risk tasks with approval flows.",
     blocks: "Blocks high-impact actions without explicit user confirmation.",
     escalation: "Escalates on anomalies + policy violations.",
   },
   {
     key: "business",
-    title: "Business Operator",
-    can: "Can run ops workflows and scheduled actions.",
+    title: "Business Mode",
+    can: "Can run business workflows and scheduled actions.",
     blocks: "Blocks high-risk financial and security actions.",
-    escalation: "Escalates to operators and audit log.",
+    escalation: "Escalates to your team and the audit log.",
   },
   {
     key: "autonomy",
@@ -160,7 +160,7 @@ export default function Quickstart() {
     if (typeof window !== "undefined") {
       localStorage.setItem("edon_agent_token", token);
     }
-    toast({ title: "Agent token created", description: "Save and copy your token." });
+    toast({ title: "Agent key created", description: "Save and copy your key." });
   };
 
   const saveLlmKey = () => {
@@ -194,7 +194,7 @@ export default function Quickstart() {
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">EDON Quickstart Flow</p>
           <h1 className="text-3xl font-semibold mt-2">Go live in five steps</h1>
           <p className="text-sm text-muted-foreground max-w-3xl mt-2">
-            Configure your model, tokens, channels, and governance mode. Everything you choose is enforced the same way by EDON.
+            Configure your model, access keys, channels, and safety mode. Everything you choose is enforced the same way by EDON.
           </p>
         </div>
 
@@ -246,10 +246,10 @@ export default function Quickstart() {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-foreground/80">
                 2
               </span>
-              Add Tokens
+              Add Access Keys
             </CardTitle>
             <CardDescription>
-              EDON needs secure credentials to operate your agent safely. Tokens are stored locally and only used according to your governance policies.
+              EDON needs secure credentials to operate your agent safely. Access keys are stored locally and only used according to your safety policies.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid lg:grid-cols-2 gap-6 text-sm">
@@ -259,7 +259,7 @@ export default function Quickstart() {
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-emerald-300" />
                     <div>
-                      <p className="font-medium">LLM Token (Your AI Brain)</p>
+                      <p className="font-medium">LLM Access Key (Your AI Brain)</p>
                       <p className="text-xs text-muted-foreground">
                         Choose how EDON connects to your AI model. OAuth is easiest and safest.
                       </p>
@@ -339,7 +339,7 @@ export default function Quickstart() {
 
                   <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                     <HelpCircle className="h-3.5 w-3.5" />
-                    <span>This token allows EDON to access your AI model to process commands. EDON cannot use it outside your policies.</span>
+                    <span>This key lets EDON connect to your AI model to process commands. EDON cannot use it outside your policies.</span>
                   </div>
                 </div>
               </div>
@@ -348,20 +348,20 @@ export default function Quickstart() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <KeyRound className="h-4 w-4 text-emerald-300" />
-                    <span className="font-medium">Agent Token (Required)</span>
+                    <span className="font-medium">Agent Access Key (Required)</span>
                   </div>
                   <Badge variant="outline" className="border-white/10 text-muted-foreground">Required</Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  This token lets EDON control your agent safely and locally.
+                  This key lets EDON control your agent safely and locally.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Button size="sm" onClick={generateAgentToken}>Generate Secure Token</Button>
-                  <Button size="sm" variant="ghost" onClick={() => copyValue("Agent token", agentToken)}>
+                  <Button size="sm" onClick={generateAgentToken}>Generate Secure Key</Button>
+                  <Button size="sm" variant="ghost" onClick={() => copyValue("Agent access key", agentToken)}>
                     <Copy className="h-3 w-3 mr-1" /> Copy
                   </Button>
                 </div>
-                <Input value={agentToken} readOnly placeholder="Generated token appears here" className="bg-secondary/50" />
+                <Input value={agentToken} readOnly placeholder="Generated key appears here" className="bg-secondary/50" />
                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                   <HelpCircle className="h-3.5 w-3.5" />
                   <span>Stored locally in your browser/session. Revocable anytime. Needed for EDON to execute tasks safely.</span>
@@ -372,7 +372,7 @@ export default function Quickstart() {
             <div className="space-y-4">
               <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
                 <CollapsibleTrigger className="flex items-center justify-between w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                  <span className="font-medium">Optional Claw/Gateway Token (Advanced)</span>
+                  <span className="font-medium">Optional Connection Key (Advanced)</span>
                   <ChevronDown className={`h-4 w-4 transition ${advancedOpen ? "rotate-180" : ""}`} />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="mt-3 rounded-lg border border-white/10 bg-white/5 p-4 space-y-2">
@@ -382,11 +382,11 @@ export default function Quickstart() {
                   <Input
                     value={gatewayToken}
                     onChange={(e) => setGatewayToken(e.target.value)}
-                    placeholder="Paste gateway token"
+                    placeholder="Paste connection key"
                     className="bg-secondary/50"
                   />
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => copyValue("Gateway token", gatewayToken)}>
+                    <Button size="sm" variant="outline" onClick={() => copyValue("Connection key", gatewayToken)}>
                       <Copy className="h-3 w-3 mr-1" /> Copy
                     </Button>
                   </div>
@@ -397,7 +397,7 @@ export default function Quickstart() {
                 </CollapsibleContent>
               </Collapsible>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-xs text-muted-foreground">
-                Tokens are stored locally for this browser session only.
+                Access keys are stored locally for this browser session only.
               </div>
             </div>
           </CardContent>
@@ -454,9 +454,9 @@ export default function Quickstart() {
               </div>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 space-y-2">
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">API</p>
-                <p className="text-sm text-muted-foreground">Use the agent token for API calls.</p>
-                <Button size="sm" variant="ghost" onClick={() => copyValue("Agent token", agentToken)}>
-                  <Copy className="h-3 w-3 mr-1" /> Copy token
+                <p className="text-sm text-muted-foreground">Use the agent access key for API calls.</p>
+                <Button size="sm" variant="ghost" onClick={() => copyValue("Agent access key", agentToken)}>
+                  <Copy className="h-3 w-3 mr-1" /> Copy key
                 </Button>
               </div>
               <div className="rounded-lg border border-white/10 bg-white/5 p-4 space-y-2">
@@ -476,7 +476,7 @@ export default function Quickstart() {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-foreground/80">
                 4
               </span>
-              Choose Governance Mode
+              Choose Safety Mode
             </CardTitle>
             <CardDescription>Each mode defines what EDON can do, what it blocks, and how it escalates.</CardDescription>
           </CardHeader>
@@ -510,9 +510,9 @@ export default function Quickstart() {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-foreground/80">
                 5
               </span>
-              Send a Test Command
+              Send a Sample Command
             </CardTitle>
-            <CardDescription>One-click test + example prompts to validate end-to-end.</CardDescription>
+            <CardDescription>One-click send + example prompts to confirm end-to-end.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div className="grid md:grid-cols-2 gap-3">
@@ -533,7 +533,7 @@ export default function Quickstart() {
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>Summary</CardTitle>
-            <CardDescription>Model, tokens, channels, and governance mode in one view.</CardDescription>
+            <CardDescription>Model, access keys, channels, and safety mode in one view.</CardDescription>
           </CardHeader>
           <CardContent className="grid md:grid-cols-2 gap-4 text-sm">
             <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
@@ -541,16 +541,16 @@ export default function Quickstart() {
               <p className="mt-2">{selectedModel} · {selectedProvider}</p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">Tokens</p>
-              <p className="mt-2">LLM token: {llmTokenType === "apikey" && llmApiKey ? "Saved" : llmTokenType === "oauth" ? "OAuth" : "Local"}</p>
-              <p className="text-muted-foreground">Agent token: {agentToken ? "Generated" : "Not set"}</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Access Keys</p>
+              <p className="mt-2">LLM key: {llmTokenType === "apikey" && llmApiKey ? "Saved" : llmTokenType === "oauth" ? "OAuth" : "Local"}</p>
+              <p className="text-muted-foreground">Agent key: {agentToken ? "Generated" : "Not set"}</p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
               <p className="text-xs uppercase tracking-widest text-muted-foreground">Channels</p>
               <p className="mt-2">{connectedChannels.length ? connectedChannels.join(", ") : "None connected"}</p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">Governance</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Safety</p>
               <p className="mt-2">{governanceModes.find((item) => item.key === mode)?.title}</p>
             </div>
           </CardContent>

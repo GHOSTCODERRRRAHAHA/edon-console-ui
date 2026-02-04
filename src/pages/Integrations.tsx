@@ -73,7 +73,7 @@ export default function Integrations() {
     if (!isMockMode() && !getToken()) {
       setStatus({
         connected: false,
-        last_error: 'API token required. Set token in Settings.',
+        last_error: 'Access key required. Set your key in Settings.',
       });
       setLoading(false);
       return;
@@ -105,8 +105,8 @@ export default function Integrations() {
     }
     if (!isMockMode() && !getToken()) {
       toast({
-        title: 'Authentication Required',
-        description: 'Set your EDON API token in Settings before connecting.',
+        title: 'Sign-in Required',
+        description: 'Set your EDON access key in Settings before connecting.',
         variant: 'destructive',
       });
       return;
@@ -158,7 +158,7 @@ export default function Integrations() {
         >
           <div className="mb-8">
             <h1 className="text-2xl font-bold mb-1">Integrations</h1>
-            <p className="text-muted-foreground">Connect and manage Clawdbot Gateway integration</p>
+            <p className="text-muted-foreground">Connect and manage your assistant integration</p>
           </div>
 
           {/* Clawdbot Integration Card */}
@@ -169,9 +169,9 @@ export default function Integrations() {
                   <PlugZap className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold">Clawdbot Gateway</h2>
+                  <h2 className="text-xl font-semibold">Assistant Connection</h2>
                   <p className="text-sm text-muted-foreground">
-                    Connect your Clawdbot Gateway to enable governance
+                    Connect your assistant to enable safety controls
                   </p>
                 </div>
               </div>
@@ -214,12 +214,12 @@ export default function Integrations() {
                   disabled={connecting || isMockMode()}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Clawdbot Gateway base URL
+                  Connection base URL
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="authMode">Auth Mode</Label>
+                <Label htmlFor="authMode">Sign-in method</Label>
                 <Select
                   value={authMode}
                   onValueChange={(value: 'password' | 'token') => setAuthMode(value)}
@@ -230,11 +230,11 @@ export default function Integrations() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="password">Password</SelectItem>
-                    <SelectItem value="token">Token</SelectItem>
+                    <SelectItem value="token">Access key</SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  Authentication mode used by Clawdbot Gateway
+                  Sign-in method used for this connection
                 </p>
               </div>
 
@@ -245,12 +245,12 @@ export default function Integrations() {
                   type="password"
                   value={secret}
                   onChange={(e) => setSecret(e.target.value)}
-                  placeholder={authMode === 'password' ? 'local-dev' : 'your-token'}
+                  placeholder={authMode === 'password' ? 'local' : 'api-token'}
                   className="bg-secondary/50"
                   disabled={connecting || isMockMode()}
                 />
                 <p className="text-xs text-muted-foreground">
-                  {authMode === 'password' ? 'Gateway password' : 'Bearer token'}
+                  {authMode === 'password' ? 'Connection password' : 'Access key'}
                 </p>
               </div>
 
@@ -267,7 +267,7 @@ export default function Integrations() {
                 ) : (
                   <>
                     <PlugZap className="w-4 h-4" />
-                    Test & Connect
+                    Connect & Verify
                   </>
                 )}
               </Button>
@@ -297,7 +297,7 @@ export default function Integrations() {
                       <p className="font-mono">{status.base_url || 'N/A'}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Auth Mode</p>
+                      <p className="text-muted-foreground">Sign-in method</p>
                       <p className="capitalize">{status.auth_mode || 'N/A'}</p>
                     </div>
                     {status.last_ok_at && (
@@ -352,7 +352,7 @@ export default function Integrations() {
                       
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-muted-foreground">Network Gating</p>
+                          <p className="text-muted-foreground">Network protection</p>
                           <Badge variant="outline" className={status.network_gating_enabled ? 'border-emerald-500/50' : ''}>
                             {status.network_gating_enabled ? 'Enabled' : 'Disabled'}
                           </Badge>
@@ -371,7 +371,7 @@ export default function Integrations() {
                       {status.bypass_risk === 'high' && status.recommendation && (
                         <Alert className="border-red-500/50 bg-red-500/10">
                           <AlertTriangle className="h-4 w-4 text-red-400" />
-                          <AlertTitle className="text-red-400">Bypass Risk Detected</AlertTitle>
+                          <AlertTitle className="text-red-400">Security Risk Detected</AlertTitle>
                           <AlertDescription className="text-sm text-red-300/90 mt-2 whitespace-pre-line">
                             {status.recommendation}
                           </AlertDescription>
@@ -382,7 +382,7 @@ export default function Integrations() {
 
                   {status.active_policy_pack && (
                     <div className="pt-2">
-                      <p className="text-muted-foreground text-sm mb-1">Active Policy Pack</p>
+                      <p className="text-muted-foreground text-sm mb-1">Active Safety Pack</p>
                       <Badge variant="outline">{status.active_policy_pack}</Badge>
                     </div>
                   )}

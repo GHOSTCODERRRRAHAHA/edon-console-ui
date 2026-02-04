@@ -116,7 +116,7 @@ export function TopNav() {
               {hasToken && (
                 <Badge variant="outline" className="border-cyan-500/50 text-cyan-300 bg-cyan-500/10 flex items-center gap-1.5">
                   <KeyRound className="w-3 h-3" />
-                  Authenticated
+                  Signed in
                 </Badge>
               )}
               <Badge

@@ -124,8 +124,8 @@ export default function Dashboard() {
               <div>1) Pick your AI model</div>
               <div>2) Add LLM + agent tokens</div>
               <div>3) Connect a channel (Slack, email, API)</div>
-              <div>4) Choose governance mode</div>
-              <div>5) Send a test command</div>
+              <div>4) Choose safety mode</div>
+              <div>5) Send a sample command</div>
             </div>
             <div className="flex flex-col gap-3">
               <Link to="/quickstart">

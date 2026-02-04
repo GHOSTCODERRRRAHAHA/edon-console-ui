@@ -240,7 +240,7 @@ export default function Audit() {
 
                 <div className="relative min-w-[200px]">
                   <Input
-                    placeholder="Policy Version (e.g., 1.0.0)"
+                    placeholder="Safety Version (e.g., 1.0.0)"
                     value={policyVersionFilter}
                     onChange={(e) => setPolicyVersionFilter(e.target.value)}
                     className="bg-secondary/50 font-mono text-sm"
@@ -313,7 +313,7 @@ export default function Audit() {
                   <TableHead className="text-muted-foreground">Agent ID</TableHead>
                   <TableHead className="text-muted-foreground">Reason</TableHead>
                   <TableHead className="text-muted-foreground">Intent ID</TableHead>
-                  <TableHead className="text-muted-foreground">Policy Version</TableHead>
+                  <TableHead className="text-muted-foreground">Safety Version</TableHead>
                   <TableHead className="text-muted-foreground text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
