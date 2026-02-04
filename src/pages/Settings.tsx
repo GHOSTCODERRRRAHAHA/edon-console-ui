@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { edonApi } from "@/lib/api";
-import { Globe, KeyRound, UserRound, Wifi, WifiOff, Save } from "lucide-react";
+import { Globe, KeyRound, UserRound, Wifi, WifiOff, Save, FlaskConical } from "lucide-react";
 import { runGovernanceSmokeTest, type SmokeStep } from "@/lib/smokeTest";
 import { runGovernanceVerificationTest, type VerificationResult } from "@/lib/verificationTest";
 import { getVerificationHistory, appendVerificationRecord, type VerificationHistoryRecord } from "@/lib/verificationHistory";
