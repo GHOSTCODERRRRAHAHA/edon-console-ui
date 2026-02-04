@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { edonApi } from "@/lib/api";
-import { Globe, KeyRound, UserRound, Wifi, WifiOff, FlaskConical, Save } from "lucide-react";
+import { Globe, KeyRound, UserRound, Wifi, WifiOff, Save } from "lucide-react";
 import { runGovernanceSmokeTest, type SmokeStep } from "@/lib/smokeTest";
 import { runGovernanceVerificationTest, type VerificationResult } from "@/lib/verificationTest";
 import { getVerificationHistory, appendVerificationRecord, type VerificationHistoryRecord } from "@/lib/verificationHistory";
@@ -21,7 +21,6 @@ type ConnStatus = "unknown" | "connected" | "disconnected" | "failed";
 const BASE_URL_KEY = "edon_api_base";
 const TOKEN_KEY = "edon_token";
 const AGENT_ID_KEY = "edon_agent_id";
-const MOCK_KEY = "edon_mock_mode";
 const ADMIN_KEY = "edon_admin_mode";
 const LLM_PROVIDER_KEY = "edon_llm_provider";
 const LLM_MODEL_KEY = "edon_llm_model";
@@ -82,7 +81,6 @@ export default function Settings() {
   const [baseUrl, setBaseUrl] = useState("http://127.0.0.1:8000");
   const [token, setToken] = useState("");
   const [agentId, setAgentId] = useState("default-agent");
-  const [mockMode, setMockMode] = useState(false);
   const [testing, setTesting] = useState(false);
   const [llmProvider, setLlmProvider] = useState("anthropic");
   const [llmModel, setLlmModel] = useState("Claude Sonnet");
@@ -132,7 +130,6 @@ useEffect(() => {
   setBaseUrl(getStoredBaseUrl(envUrl, isProd));
   setToken(getStoredToken(envToken));
   setAgentId(localStorage.getItem(AGENT_ID_KEY) || "default-agent");
-  setMockMode(localStorage.getItem(MOCK_KEY) === "true");
   setAdminMode(localStorage.getItem(ADMIN_KEY) === "true");
   setLlmProvider(localStorage.getItem(LLM_PROVIDER_KEY) || "anthropic");
   setLlmModel(localStorage.getItem(LLM_MODEL_KEY) || "Claude Sonnet");
@@ -178,7 +175,6 @@ useEffect(() => {
     localStorage.setItem("EDON_BASE_URL", trimmedBase);
     localStorage.setItem("edon_base_url", trimmedBase);
     localStorage.setItem(AGENT_ID_KEY, agentId.trim() || "default-agent");
-    localStorage.setItem(MOCK_KEY, mockMode.toString());
     localStorage.setItem(ADMIN_KEY, adminMode.toString());
   };
 
@@ -363,8 +359,6 @@ useEffect(() => {
 
     try {
       // Always test with mock disabled
-      localStorage.setItem(MOCK_KEY, "false");
-      setMockMode(false);
 
       // Validate input token (don’t validate storage)
       if (!safeBase) {
@@ -418,8 +412,6 @@ useEffect(() => {
       });
 
       // Keep mock off after success
-      localStorage.setItem(MOCK_KEY, "false");
-      setMockMode(false);
     } catch (err: unknown) {
       setConnectionStatus("failed");
       toast({
@@ -505,7 +497,6 @@ useEffect(() => {
   const canRunVerification =
     (smokeTestResult?.ok === true || connectionStatus === "connected") &&
     !verificationRunning &&
-    !mockMode &&
     isLikelyToken(token.trim()) &&
     !!normalizeBaseUrl(baseUrl.trim()) &&
     hasActiveIntent;
@@ -677,38 +668,6 @@ useEffect(() => {
             </div>
 
             <div className="glass-card p-6 space-y-8">
-            {/* Mock Mode Toggle */}
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <Label className="text-base flex items-center gap-2">
-                  <FlaskConical className="w-4 h-4" />
-                  Mock Mode (Development Only)
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Use simulated data instead of live EDON Gateway. Disabled by default for production.
-                </p>
-              </div>
-              <Switch
-                checked={mockMode}
-                onCheckedChange={(checked) => {
-                  setMockMode(checked);
-                  localStorage.setItem(MOCK_KEY, checked.toString());
-                  if (!checked) {
-                    toast({
-                      title: "Production Mode Enabled",
-                      description: "Now connecting to EDON Gateway",
-                    });
-                  }
-                }}
-                disabled={isProd}
-              />
-            </div>
-            {isProd && (
-              <p className="text-xs text-muted-foreground">Mock mode is disabled in production to ensure live data.</p>
-            )}
-
-            <Separator className="bg-white/10" />
-
             {/* Admin Mode Toggle */}
             <div className="flex items-center justify-between">
               <div className="space-y-1">
@@ -1134,7 +1093,7 @@ useEffect(() => {
                     </Badge>
                   </div>
 
-                  <Button onClick={testConnection} disabled={testing || mockMode} variant="outline" className="w-full gap-2">
+                  <Button onClick={testConnection} disabled={testing} variant="outline" className="w-full gap-2">
                     {testing ? (
                       <>
                         <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -1148,9 +1107,6 @@ useEffect(() => {
                     )}
                   </Button>
 
-                  {mockMode && (
-                    <p className="text-xs text-center text-muted-foreground">Disable mock mode to test real connection</p>
-                  )}
                 </div>
 
                 <Separator className="bg-white/10" />
@@ -1175,7 +1131,7 @@ useEffect(() => {
                   </div>
                   <Button
                     onClick={runSmokeTest}
-                    disabled={testing || smokeTestRunning || mockMode || !token.trim() || !baseUrl.trim()}
+                    disabled={testing || smokeTestRunning || !token.trim() || !baseUrl.trim()}
                     variant="outline"
                     className="w-full gap-2"
                   >

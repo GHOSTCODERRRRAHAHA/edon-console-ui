@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Gauge, ListChecks, FileSearch, Settings2, Wifi, WifiOff, PlugZap, KeyRound, Sparkles, MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { edonApi, isMockMode } from '@/lib/api';
+import { edonApi } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ChatSidebar } from '@/components/ChatSidebar';
@@ -20,7 +20,6 @@ const navItems = [
 export function TopNav() {
   const location = useLocation();
   const [isConnected, setIsConnected] = useState(true);
-  const [isMock, setIsMock] = useState(() => isMockMode());
   const [hasToken, setHasToken] = useState(() => typeof window !== 'undefined' && !!localStorage.getItem('edon_token'));
   const [chatOpen, setChatOpen] = useState(false);
 
@@ -30,23 +29,15 @@ export function TopNav() {
         const health = await edonApi.getHealth();
         setIsConnected(true);
         
-        // Auto-disable mock mode if gateway is reachable
-        if (isMockMode() && typeof window !== 'undefined') {
-          localStorage.setItem('edon_mock_mode', 'false');
-          setIsMock(false);
-        }
       } catch {
         setIsConnected(false);
       }
     };
 
-    // Update mock mode state
-    setIsMock(isMockMode());
     checkConnection();
     
     // Listen for storage changes (when mock mode is toggled in Settings)
     const handleStorageChange = () => {
-      setIsMock(isMockMode());
       setHasToken(typeof window !== 'undefined' && !!localStorage.getItem('edon_token'));
     };
     window.addEventListener('storage', handleStorageChange);
@@ -57,7 +48,6 @@ export function TopNav() {
     
     const interval = setInterval(() => {
       checkConnection();
-      setIsMock(isMockMode()); // Refresh mock mode state
       setHasToken(typeof window !== 'undefined' && !!localStorage.getItem('edon_token'));
     }, 30000);
     
@@ -127,11 +117,6 @@ export function TopNav() {
                 <Badge variant="outline" className="border-cyan-500/50 text-cyan-300 bg-cyan-500/10 flex items-center gap-1.5">
                   <KeyRound className="w-3 h-3" />
                   Authenticated
-                </Badge>
-              )}
-              {isMock && (
-                <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10">
-                  Mock Mode
                 </Badge>
               )}
               <Badge

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Timer, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
 
 const policyModes = {
   'personal-safe': {
@@ -45,9 +46,9 @@ export function PolicyModeCard() {
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold">Policy Mode</h3>
-        <a href="/policies" className="text-primary text-sm flex items-center gap-1 hover:underline">
+        <Link to="/policies" className="text-primary text-sm flex items-center gap-1 hover:underline">
           Manage <ChevronRight className="w-4 h-4" />
-        </a>
+        </Link>
       </div>
 
       <div className={`p-4 rounded-xl bg-gradient-to-br ${mode.color} mb-4`}>

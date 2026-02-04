@@ -24,17 +24,14 @@ const AppRoutes = () => {
     if (typeof window === "undefined") return false;
     return Boolean(localStorage.getItem("edon_token"));
   });
-  const [mockMode, setMockMode] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("edon_mock_mode") === "true";
-  });
+  const [mockMode, setMockMode] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const refresh = () => {
       setHasToken(Boolean(localStorage.getItem("edon_token")));
-      setMockMode(localStorage.getItem("edon_mock_mode") === "true");
+      setMockMode(false);
     };
 
     refresh();
@@ -50,7 +47,7 @@ const AppRoutes = () => {
     };
   }, [location.pathname]);
 
-  if (!hasToken && !mockMode && location.pathname !== "/settings" && location.pathname !== "/quickstart") {
+  if (!hasToken && location.pathname !== "/settings" && location.pathname !== "/quickstart") {
     return <AccessGate />;
   }
 
@@ -102,10 +99,6 @@ const App = () => {
     if (safeToken) {
       localStorage.setItem("edon_token", safeToken);
       localStorage.setItem("edon_mock_mode", "false");
-    }
-
-    if (!localStorage.getItem("edon_token") && localStorage.getItem("edon_mock_mode") === null) {
-      localStorage.setItem("edon_mock_mode", "true");
     }
 
     if (safeBaseUrl || safeToken) {

@@ -272,11 +272,6 @@ export default function Integrations() {
                 )}
               </Button>
 
-              {isMockMode() && (
-                <p className="text-xs text-center text-muted-foreground">
-                  Disable mock mode in Settings to connect to real gateway
-                </p>
-              )}
             </div>
 
             {/* Status Information */}
