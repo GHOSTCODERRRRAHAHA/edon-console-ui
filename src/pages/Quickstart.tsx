@@ -11,12 +11,12 @@ import { ChevronDown, Copy, KeyRound, Sparkles, ShieldCheck, Link2, Cpu, HelpCir
 import { useToast } from "@/hooks/use-toast";
 
 const baseModels = [
-  { name: "Claude Sonnet", provider: "Anthropic", price: "$", strengths: "Balanced safety + tools", note: "Strong default" },
-  { name: "GPT-4o", provider: "OpenAI", price: "$$", strengths: "Multimodal speed", note: "Great for mixed media" },
-  { name: "GPT-5.2", provider: "OpenAI", price: "$", strengths: "Fast reasoning + tools", note: "Lowest latency" },
-  { name: "Gemini 1.5 Pro", provider: "Google", price: "$", strengths: "Long context", note: "Huge context window" },
-  { name: "Mistral Large", provider: "Mistral", price: "$", strengths: "Efficient reasoning", note: "Great value" },
-  { name: "Local / BYO Model", provider: "Custom", price: "$0 infra", strengths: "Privacy", note: "Bring your own endpoint" },
+  { name: "Claude Sonnet", provider: "Anthropic", strengths: "Balanced safety + tools", note: "Strong default" },
+  { name: "GPT-4o", provider: "OpenAI", strengths: "Multimodal speed", note: "Great for mixed media" },
+  { name: "GPT-5.2", provider: "OpenAI", strengths: "Fast reasoning + tools", note: "Lowest latency" },
+  { name: "Gemini 1.5 Pro", provider: "Google", strengths: "Long context", note: "Huge context window" },
+  { name: "Mistral Large", provider: "Mistral", strengths: "Efficient reasoning", note: "Great value" },
+  { name: "Local / BYO Model", provider: "Custom", strengths: "Privacy", note: "Bring your own endpoint" },
 ];
 
 const governanceModes = [
@@ -118,7 +118,6 @@ export default function Quickstart() {
           const mapped = parsed.map((name) => baseModels.find((row) => row.name === name) || {
             name,
             provider: "Custom",
-            price: "$",
             strengths: "Custom model",
             note: "Managed list",
           });
@@ -209,17 +208,16 @@ export default function Quickstart() {
             <CardDescription>Select the model you want to run. Change later in Settings.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <div className="grid grid-cols-5 gap-4 text-xs uppercase tracking-widest text-muted-foreground px-4">
+            <div className="grid grid-cols-4 gap-4 text-xs uppercase tracking-widest text-muted-foreground px-4">
               <div>Model</div>
               <div>Provider</div>
-              <div>Pricing</div>
               <div className="col-span-2">Strengths</div>
             </div>
             <div className="rounded-xl border border-white/10 overflow-hidden">
               {modelRows.map((item) => (
                 <div
                   key={item.name}
-                  className={`grid grid-cols-5 gap-4 px-4 py-3 text-sm border-b border-white/5 ${
+                  className={`grid grid-cols-4 gap-4 px-4 py-3 text-sm border-b border-white/5 ${
                     selectedModel === item.name ? "bg-white/5" : ""
                   }`}
                 >
@@ -227,7 +225,6 @@ export default function Quickstart() {
                     <span>{item.name}</span>
                   </div>
                   <div className="text-muted-foreground">{item.provider}</div>
-                  <div className="text-muted-foreground">{item.price}</div>
                   <div className="col-span-2 flex items-center justify-between gap-4 text-muted-foreground">
                     <span>{item.strengths} · {item.note}</span>
                     <Button size="sm" variant="ghost" onClick={() => setSelectedModel(item.name)}>

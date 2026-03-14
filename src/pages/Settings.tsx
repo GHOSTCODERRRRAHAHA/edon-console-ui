@@ -693,21 +693,6 @@ export default function Settings() {
             </div>
           </section>
 
-          {/* ── UPGRADE PROMPT ──────────────────────── */}
-          {planName && planName.toLowerCase() !== "pro" && (
-            <div className="glass-card p-5 border border-primary/20">
-              <p className="text-sm font-medium mb-1">More decisions, more agents</p>
-              <p className="text-xs text-muted-foreground mb-3">
-                {planName === "free" || !planName
-                  ? "You're on the free plan — 50K decisions/mo, 3 agents. Upgrade to Scale for 5M decisions and 100 agents."
-                  : "Upgrade to Pro for 25M decisions, 1,000 agents, and the full compliance suite."}
-              </p>
-              <a href="https://edoncore.com/pricing" target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-primary hover:underline">
-                See all plans →
-              </a>
-            </div>
-          )}
-
           {/* ── GATEWAY CONNECTION ──────────────────── */}
           <section>
             <button
