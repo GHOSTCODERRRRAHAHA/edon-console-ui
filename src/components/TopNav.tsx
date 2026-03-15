@@ -59,6 +59,7 @@ export function TopNav() {
   const [notifs, setNotifs] = useState<Notif[]>([]);
   const [unread, setUnread] = useState(0);
   const [notifsOpen, setNotifsOpen] = useState(false);
+  const notifsRef = useRef<HTMLDivElement>(null);
   const lastSeenRef = useRef<string>(
     typeof window !== 'undefined' ? (localStorage.getItem(LAST_SEEN_KEY) || new Date(0).toISOString()) : new Date(0).toISOString()
   );
@@ -94,8 +95,19 @@ export function TopNav() {
     lastSeenRef.current = now;
     localStorage.setItem(LAST_SEEN_KEY, now);
     setUnread(0);
-    setNotifsOpen(false);
   };
+
+  // Close notifs dropdown on outside click
+  useEffect(() => {
+    if (!notifsOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (notifsRef.current && !notifsRef.current.contains(e.target as Node)) {
+        setNotifsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [notifsOpen]);
 
   function relTime(iso: string) {
     const diff = Date.now() - new Date(iso).getTime();
@@ -205,9 +217,9 @@ export function TopNav() {
 
               {/* Notifications bell */}
               {hasToken && (
-                <div className="relative">
+                <div className="relative" ref={notifsRef}>
                   <button
-                    onClick={() => { setNotifsOpen((v) => !v); if (!notifsOpen) markAllRead(); }}
+                    onClick={() => { setNotifsOpen((v) => !v); }}
                     className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
                     aria-label="Governance alerts"
                   >
